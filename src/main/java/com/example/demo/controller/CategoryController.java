@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CategoryRequest;
+import com.example.demo.dto.CategoryResponse;
 import com.example.demo.dto.RegisterUserRequest;
 import com.example.demo.dto.Response;
 import com.example.demo.model.Categories;
@@ -12,10 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Validated
@@ -28,19 +28,48 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<Response> addData(@Validated @RequestBody CategoryRequest request) {
-        Response res = new Response();
-        try {
-            Categories categories =  categoryService.create(request);
+        Categories categories = categoryService.create(request);
 
-            res.setStatus(true);
-            res.setMessage("SUCCESS");
-            res.setResult(categories.getName());
-            return ResponseEntity.ok().body(res);
-        } catch(Exception e){
-            log.error(e.getMessage());
-            res.setStatus(false);
-            res.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
-        }
+        return ResponseEntity.ok(
+                new Response("SUCCESS", true, categories.getName())
+        );
     }
+
+    @GetMapping
+    public ResponseEntity<Response> getAllData() {
+        List<Categories> categories = categoryService.getAll();
+
+        return ResponseEntity.ok(
+                new Response("SUCCESS", true, categories)
+        );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Response> getData(@PathVariable Integer id) {
+        CategoryResponse response = categoryService.getDetail(id);
+
+        return ResponseEntity.ok(
+                new Response("SUCCESS", true, response)
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Response> updateData(@PathVariable Integer id,
+                                               @Validated @RequestBody CategoryRequest request) {
+        boolean updated = categoryService.update(id, request);
+
+        return ResponseEntity.ok(
+                new Response("SUCCESS", true, updated)
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Response> deleteData(@PathVariable Integer id) {
+        boolean deleted = categoryService.deleteCategory(id);
+
+        return ResponseEntity.ok(
+                new Response("SUCCESS", true, deleted)
+        );
+    }
+
 }

@@ -1,16 +1,14 @@
 package com.example.demo.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class Response {
+public class ResponsePageable {
+    private boolean status;
     private String message;
-    private Boolean status;
     private Object result;
+    private Integer page;
+    private Integer size;
 }

@@ -28,38 +28,20 @@ public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/register")
-    public ResponseEntity<Response> addData(@Validated @RequestBody RegisterUserRequest request) {
-        Response res = new Response();
-        try {
-            Users users =  authService.registerUser(request);
+    public ResponseEntity<Response> register(@Validated @RequestBody RegisterUserRequest request) {
+        Users users = authService.registerUser(request);
 
-            res.setStatus(true);
-            res.setMessage("SUCCESS");
-            res.setResult(users.getName());
-            return ResponseEntity.ok().body(res);
-        } catch(Exception e){
-            log.error(e.getMessage());
-            res.setStatus(false);
-            res.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
-        }
+        return ResponseEntity.ok(
+                new Response("SUCCESS", true, users.getName())
+        );
     }
 
     @PostMapping("/login")
     public ResponseEntity<Response> login(@Validated @RequestBody LoginRequest request) {
-        Response res = new Response();
-        try {
-            String token = authService.login(request.getEmail(), request.getPassword());
+        String token = authService.login(request.getEmail(), request.getPassword());
 
-            res.setStatus(true);
-            res.setMessage("SUCCESS");
-            res.setResult(new LoginResponse(token));
-            return ResponseEntity.ok().body(res);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            res.setStatus(false);
-            res.setMessage(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
-        }
+        return ResponseEntity.ok(
+                new Response("SUCCESS", true, new LoginResponse(token))
+        );
     }
 }
