@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Repository
 public interface BookRepository extends JpaRepository<Books, Integer> {
     @Query("""
@@ -24,4 +27,16 @@ public interface BookRepository extends JpaRepository<Books, Integer> {
             @Param("categoryId") Integer categoryId,
             Pageable pageable
     );
+
+    @Query(
+            value = """
+                SELECT
+                    MAX(b.price) AS max_price,
+                    MIN(b.price) AS min_price,
+                    AVG(b.price) AS avg_price
+                FROM books b
+            """,
+            nativeQuery = true
+    )
+    List<Object[]> getPrices();
 }

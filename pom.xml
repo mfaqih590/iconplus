@@ -46,7 +46,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- JWT Library -->
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
@@ -93,6 +92,17 @@
 			<version>0.12.5</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>kernel</artifactId>
+			<version>7.2.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>layout</artifactId>
+			<version>7.2.5</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -114,7 +124,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- Plugin bawaan Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

@@ -49,6 +49,9 @@ public class OrderService {
             Books books = bookRepository.findById(itemRequest.getBookId()).orElseThrow(() -> new RuntimeException("Book not found"));
             Integer Quantity = itemRequest.getQuantity();
             Integer Stock = books.getStock();
+            Integer newStock = Stock - Quantity;
+            books.setStock(newStock);
+            bookRepository.save(books);
             if(Stock < Quantity) {
                 throw new RuntimeException("Stock not available!");
             }
