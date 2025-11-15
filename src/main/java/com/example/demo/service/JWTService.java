@@ -1,4 +1,5 @@
 package com.example.demo.service;
+import com.example.demo.dto.JwtUserInfo;
 import com.example.demo.model.Users;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -38,5 +39,15 @@ public class JWTService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    public JwtUserInfo extractUserInfo(String token) {
+        Claims claims = extractAllClaims(token);
+        return new JwtUserInfo(
+                claims.get("id", Integer.class),
+                claims.get("name", String.class),
+                claims.get("role", String.class),
+                claims.get("email", String.class)
+        );
     }
 }
